@@ -38,3 +38,33 @@
 	1. 즉 archetypeArtifactId=maven-archetype-quickstart 다른사람이 만든 프로젝트 구조를 기본으로
 	2. artifactId=javaprj 이번에는 내가 javaprj라는 새로운 프로젝트를 생성한다.
 		프로젝트명 동일한것을 막기위해 그룹아이디 지정 (com.hoseok) 자기만의 도메인이름 사용 큰 범위부터 뒤집어서 사용(원래는 hoseok.com)
+
+
+
+
+
+
+
+
+
+<------------------------------------------------------------- Maven 프로젝트 컴파일과 실행 ------------------------------------------------------------->
+* 이클립스 IDE가 아닌 콘솔창으로 해보기
+* Maven Prj는 ROOT에 pom.xml이 존재함 이는 프로젝트 컴파일 및 실행시 반드시 pom.xml에 있는 디렉토리에서 메이븐 관련된 명령어를 이용한다.
+
+* 컴파일시 오류가 난다면 JDK버젼을 7이상으로 올려야함 pom.xml수정
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+* mvn compile로 컴파일
+* 컴파일 뿐만아니라 패키지도 가능 mvn package --> jar파일 생성됨
+* class파일이 아니라 jar파일로도 실행이 가능함
+	java -cp target\javaprj-1.0-SNAPSHOT.jar com.hoseok.App
+
+
+
+
+
+
+
