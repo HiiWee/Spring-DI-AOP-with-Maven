@@ -68,3 +68,39 @@
 
 
 
+
+<------------------------------------------------------------- Build LifeCycle과 Phase들 ------------------------------------------------------------->
+* Maven이 가지고 있는 명령어들 (이것과 관련된게 빌드 라이프사이클)
+	mvn compile
+	mvn test
+	mvn package
+	(위 3개는 수행 단계의 이름이다 --> phase)
+
+* 메이븐은 기존에 많은 단계들을 가짐(phase) 만약 compile을 한다면 앞의 단계는 자동적으로 실행됨
+	즉 명령어는 실행하기 원하는 단계까지만 실행해달라는 의미가 됨.
+	예를 들어 compile은 사전에 validate - initialize - getnerate-sources - process-sources - generate-resources - process-resources 단계를 거치고 compile이 실행된다.
+
+* 다만 패키징(jar냐 war(웹개발)이냐 에따라 단계가 비슷하지만 조금씩 다름)에 따라 다르다.
+	이 패키징은 변경할 수 있다.
+
+* 변경하는 위치는 pom.xml에 설정을 할 수 있다.
+
+* pom의 의미? -> Project Object Model : 프로젝트를 만들게 되면 프로젝트를 구성하고 있는 내용에 관한 것을 하나의 모델로 가지고 있음
+					즉 프로젝트 모델을 변경하면 프로젝트가 달라지게 된다.
+
+* 그렇다면 단계를 수행하는것은 정적으로 정해져 있나? -> 각 단계별로 끊어놨기 때문에 각 단계가 무조건 실행되는것은 아니다.
+	따라서 플러그인처럼 뺐다 꼈다 할 수 있다.
+	> compile: org.apache.maven.plugins:maven-compiler-plugin:3.1:compile에서 
+	  phase                       plug-in                          Goal(플러그인의 내부적으로 나뉜 단계) 이렇게 존재
+
+* 메이븐 프로젝트를 처음 생성하면
+	> 기본적으로 process-resources, compile, process-teest-resources, test-compile, test, package는 단계에 해당되는 프로그램(플러그인)이 매핑되어있다.
+	> 나머지 단계는 정의는 있으나 플러그인은 연결되지 않음
+
+* 그럼 연결할 수 있나? 있다 어디서? --> pom.xml에서 할 수 있다.
+
+* 기존 설정도 pom.xml에서 변경할 수 있다(버전 등등)
+
+* 실제 콘솔창에서 mvn help:describe -Dcmd=compile 입력시 단계(phase)별 플러그인이 설정되어있는지 확인 가능하다
+
+* 그렇다면 플러그인은 어디서 구하나? 메이븐이 기본적으로 제공하는 것이나 혹은 외부에서 다운받아 사용가능하다.
