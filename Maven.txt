@@ -125,6 +125,105 @@
 
 
 
+<------------------------------------------------------------- 컴파일 플러그인으로 JDK 버전 변경하기 ------------------------------------------------------------->
+* 컴파일에 플러그인을 설정할 것
+	> 컴파일 단계를 수행하고 있는 플러그인을 손볼것이다.
+	> 컴파일을 수행하고 있는 플러그인이 JDK버전을 결정하고 있음
+	> JDK버전을 설정하며 플러그인 설정 알아보기
+
+* 단계(Phase)들은 플러그인과 각각 연계되어있다.
+	> 설정된 플러그인도 있지만 설정되지 않은 플러그인도 존재
+
+* 컴파일을 담당하는 플러그인는 메이븐에서 제공해줌
+	> 여기서 각 Goal을 확인할 수 있다.
+		Goal : 플러그인이 가지고 있는 하부 프로그램, 실질적인 역할
+			
+
+* 플러그인은 여러개의 작은 단위의 플러그인(Goal)을 가질 수 있다.
+
+* 플러그인은 각 단계마다 동일한 플러그인을 사용가능(그 안에서 작은 goal들이 실질적으로 단계를 책임짐)
+
+* compile단계, test-compile단계는 같은 플러그인을 쓰지만 다른 Goal을 사용(compile, testCompile)
+
+* 컴파일 옵션은 아래와 같음 아래 설정 지우고 메이븐 업데이트를 하게 되면 jdk 버전이 1.6으로 내려감
+  <!-- 컴파일 버젼을 7이상으로 설정 -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+* 1.6버전이 현재 메이븐 버전의 기본 jdk버전이다(quick start버전으로 만들어진 기본 프로젝트 jdk버전)
+
+* pom.xml파일 변경하고 나면 프로젝트 우클릭이후 Maven-> Update Project필수!
+
+* 만약 기본 플러그인을 변경할 수 있을까? 할수있다 어떻게? 아래의 설정에서 원하는 플러그인을 찾아 변경
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+* 이곳에서 maven-compiler-plugin 에 아래 소스 추가해서 기본설정위에 오버라이드 시킴
+  <configuration>			// 플러그인의 버전은 3.8.0
+	<source>1.8</source>		// 구성설정을 통해 소스코드는 1.8
+	<target>1.8</target>		// 타겟은 1.8로 설정하겠다
+  </configuration>
+
+* 컴파일러 플러그인 3.6 이상부터는 오버라이드 하듯이 하지않고 초기에 한것처럼 <properties>를 추가할 수도 있다.(새로나온 방식)
+	> 단순히 jdk버전을 손대는방법으로 적합
+	> 플러그인이 가진 다양한 옵션을 손대고 싶으면 플러그인을 이용해 속성을 변경하는것이 적합하다.
+
+
+* 프로젝트를 처음 만들때 기본 프로젝트는 maven quick start였다. 하지만 메이븐은 남이 만든 아키텍처타입을 이어서 개발할 수 있기때문에
+  남이 만든 프로젝트 틀 위에 이어서 진행할 수 도있다.
+
+* mvn archetype:generate만 입력하고 엔터를 누르면 현재 내가 이용할 수 있는 아키텍처타입 목록들이 출력된다.
+	- 아무번호도 입력하지 않으면 우리가 만든 mavne-archetype-quickstart가 된다. (맨땅으로 만들기)
+
+
+
+
 
 
 
