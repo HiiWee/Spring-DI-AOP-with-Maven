@@ -37,6 +37,11 @@
     	<version>9.0.55</version>
     </dependency>
 
+    <dependency>
+    	<groupId>com.hoseok</groupId>
+    	<artifactId>examlib</artifactId>
+    	<version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   
