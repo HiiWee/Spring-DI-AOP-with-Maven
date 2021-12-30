@@ -20,6 +20,7 @@ public class Program {
 		// InlineExamConsole = Exam출력시 격자 형태로 출력
 		ExamConsole console = new GridExamConsole(exam);	
 		// InlineExamConsole, GridExamConsole들이 exam을 조립함 --> DI
+		
 		console.print();
 	}
 
