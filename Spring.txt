@@ -125,6 +125,47 @@
 
 
 
+< ------------------------------------------------------------ Dependency를 직접 Injection 하기 ------------------------------------------------------------>
+* Spring의 도움을 받아 부품을 생성하고 조립 해야함
+	> 전에 부품조립을 Spring의 도움 없이 직접 해보기
+
+public class Program {
+
+	public static void main(String[] args) {
+		// Exam = Interface
+		// HoseokExam = Exam data 구현 객체
+		Exam exam = new HoseokExam();
+		
+		// ExamConsole = Interface type
+		// InlineExamConsole = Exam출력시 한줄에 출력
+		//ExamConsole console = new InlineExamConsole(exam);
+		
+		// InlineExamConsole = Exam출력시 격자 형태로 출력
+		ExamConsole console = new GridExamConsole(exam);	
+		// InlineExamConsole, GridExamConsole들이 exam을 조립함 --> DI
+		
+		console.print();
+	}
+	
+}
+
+* 위의 코드에서 DI를 할때 소스코드 수정없이 가능할까? 
+	> 가능케 하기 위해서 new GridExamConsole(exam);, new InlineExamConsole(exam); 이 부분이 코드로 존재하면 안됨
+	> 그리고 외부설정으로 빼야함 --> 설정을 바꾸면서 DI를 바꿔치기 할 수 있다.
+	> 객체를 생성하는 부분을 비워두고 누군가가 대신할 수 있도록 설정을 빼고 조립하는 작업 --> Spring이 대신 해줌
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
