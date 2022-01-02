@@ -305,6 +305,34 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ 값 형식 DI  ------------------------------------------------------------>
+* 지시할때 꼭 ref이 아닌 value를 이용해(<property>) 값을 세팅할 수 도있다. (값을 setter를 이용해 Injecttion하기)
+	<bean id="exam" class="spring.di.entity.HoseokExam">
+		<!-- 값 형식 DI 설정하기 -->
+		<property name="kor" value="20"/>
+		<property name="eng" value="50"/>
+		<!-- 두 번째 방법 태그를 이용할 수 도있다.-->
+		<property name="math">
+			<value>80</value>
+		</property>
+		<property name="com">
+			<value>50</value>
+		</property>
+	</bean>
+
+* 위와같이 설정할 수 있다. 다만 getter, setter가 필수적으로 작성되어있어야 한다.
+* 따라서 자바로 할 수 있었던 객체 생성, 초기화, 객체 조립 작업은 지시서에서도 할 수 있어야 한다.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
