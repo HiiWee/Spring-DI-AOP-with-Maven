@@ -1,5 +1,6 @@
 package spring.di.entity;
 
+// HoseokExam = Exam data 구현 객체
 public class HoseokExam implements Exam {
 	private int kor;
 	private int eng;

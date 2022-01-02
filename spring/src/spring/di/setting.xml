@@ -2,6 +2,25 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-
+	<!-- Exam, Console객체의 생성 및 결합을 xml설정파일이 담당함 -->
+	<!-- 생성하려는객체=class, 변수명=id 
+		 다만 생성하려는 객체는 동명이인이 존재할 수 있으므로 패키지명까지 같이 작성해야한다. 
+		 만약 같은 형식의 클래스가 존재하지 않으면 굳이 이름을 적지 않아도 된다.  -->
+	<!-- Exam exam = new HoseokExam(); -->
+	<bean id="exam" class="spring.di.entity.HoseokExam"></bean>
+	
+ 	<!-- ExamConsole console = new GridExamConsole(); -->
+	<bean id="console" class="spring.di.ui.GridExamConsole">
+	<!-- console.setExam(exam); 
+		set은 생략가능(이후 대문자를 소문자로 변경) exam = setExam
+		value=설정할 값의 이름(값 형식이면 이곳에)
+		ref=설정할 참조형 객체의 이름(참조형식은 이곳에
+		객체는 참조형이므로 ref에 대입
+		
+		위의형식을 이용하려면 console객체는 setter를 필수로 가지고 있어야한다.
+		이와같은 과정이 Injection이 되겠다.
+	-->
+		<property name="exam" value="" ref="exam"/>
+	</bean>
+	
 </beans>
