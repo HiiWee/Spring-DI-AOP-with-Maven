@@ -2,7 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 	<!-- Exam, Console객체의 생성 및 결합을 xml설정파일이 담당함 -->
 	<!-- 생성하려는객체=class, 변수명=id 
 		 다만 생성하려는 객체는 동명이인이 존재할 수 있으므로 패키지명까지 같이 작성해야한다. 
@@ -43,4 +45,25 @@
 	-->
 		<property name="exam" ref="exam"/>
 	</bean>
+
+
+	<util:list id="exams" list-class="java.util.ArrayList">
+		<bean id="exam" class="spring.di.entity.HoseokExam" p:kor="1"
+			p:eng="1" p:math="1" p:com="1" />
+		<ref bean="exam" />
+	</util:list>
+	
+	
+	<!-- 콜렉션 생성과 목록 DI -->
+	<!-- new ArrayList(Collection C)를 이용 -->
+	<!-- ref 태그: 위에서 생성한 객체를 ref 태그를 이용해 참조함 -->
+	<!-- <bean id="exams" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean id="exam" class="spring.di.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
+				<ref bean="exam" />
+			</list>
+		</constructor-arg>
+	</bean> -->
+	
 </beans>

@@ -1,5 +1,8 @@
 package spring.di;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -32,6 +35,14 @@ public class Program {
 		System.out.println(exam.toString());
 		ExamConsole console = context.getBean(ExamConsole.class);
 		console.print();
-
+		
+		// XML을 이용해 값을 초기화 하는 방법
+		List<Exam> exams = (List<Exam>) context.getBean("exams");//new ArrayList<>();
+		//exams.add(new HoseokExam(1,1,1,1));
+		
+		for (Exam e : exams) {
+			System.out.println(e);
+		}
+		// new ArrayList<>()
 	}
 }

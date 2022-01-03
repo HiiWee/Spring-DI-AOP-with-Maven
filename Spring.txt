@@ -404,3 +404,88 @@ public class Program {
 
 
 
+
+
+< ------------------------------------------------------------ 콜렉션 생성과 DI ------------------------------------------------------------>
+* XML을 이용해 콜렉션 생성 및 콜렉션에 객체 참조시키는 초기화 작업을 어떻게 DI 하는지 방법을 알아보자
+* 변경하려는 코드
+		List<Exam> exams = new ArrayList<>();
+		exams.add(new HoseokExam(1,1,1,1));
+		
+		for (Exam e : exams) {
+			System.out.println(e);
+		}
+
+* 먼저 bean 태그로 ArrayList생성
+	<bean id="exams" class="java.util.ArrayList"/>
+
+* 이후 클래스에서 getBean을 이용해 찾아옴
+	List<Exam> exams = (List<Exam>) context.getBean("exams");//new ArrayList<>();
+
+* 그렇다면 exams.add(newHoseokExam(1,1,1,1)); 은 어떻게 변경할까? (exams.add는 setter, getter가 아니므로 property태그를 이용해 세팅하는 방식으로 쓸 수 없음)
+	> ArrayList를 생성할때 생성자에 컬렉션을 대입할 수 있는 능력이 있다. (new ArrayList(Collection C)를 이용)
+	<bean id="exams" class="java.util.ArrayList">
+		<!-- new ArrayList(Collection C)를 이용 -->
+		<constructor-arg>
+			<list>
+				<bean class="spring.di.entity.HoseokExam" p:kor="10" p:eng="20" p:math="30" p:com="40"/>
+				<ref bean="exam" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	> 생성자의 값을 설정하지만 내부에 설정되는 값이 컬렉션이므로 list태그를 이용해 초기화 하고자 하는 내용을 추가한다.
+	> 우린 객체를 직접만들어 초기화 한다 이곳에선 굳이 bean의 id값이 필요없다.
+	> bean을 직접 만들지 않고 위에 존재하는 객체가 있으면 참조하여 사용할 수 있다. -> ref태그를 이용하여
+	> 그렇게 되면 총 2개의 항목이 추가된다 1. 직접 만든 객체, 2.먼저 생성된 객체 참조
+
+	> 이렇게 컬렉션 리스트를 생성자에 넘기는 방식으로 ArrayList를 만들게되면 항목을 추가하지 않아도 for each문에서 반복되어 출력된다.
+
+
+* 위와 같은 방법은 정적인 방식으로 초기화하고 가져다 쓰는 방법이다.
+
+* 그런데 생성자에다 목록으로 추가된 컬렉션을 가진 ArrayList를 만드는것이 아닌 위 자체가 ArrayList에 전달된 컬렉션이니 컬렉션을 개별적으로 따로 만드는 방법은 없을까?
+	> 생성자에다가 목록을 추가하는 방식은 불편
+
+* 그러려면 별도의 namespace가 필요하다 >> util
+	기존 list태그는 목록을 세팅할 떄 사용되는 태그로 그 자체가 객체를 만드는 역할을 하진 못함
+	util:list는 이름은 같지만 처리기가 다르고 실제로 객체를 만들 수 있도록 하는 능력을 가지고 있다.
+
+* util:list 구현
+	<util:list id="exams" list-class="java.util.ArrayList">
+		<bean id="exam" class="spring.di.entity.HoseokExam" p:kor="1"
+			p:eng="1" p:math="1" p:com="1" />
+		<ref bean="exam" />
+	</util:list>
+
+	> 다양한 종류의 컬렉션이 존재하므로 어떤 리스트를 사용할지 구체화 해야함 : list-class 옵션
+	> 직접 가져다 사용할 수 있으므로 id값 즉 이름을 가져다 사용할 수 있다. : id 옵션
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
