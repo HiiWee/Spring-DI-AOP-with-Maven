@@ -7,6 +7,16 @@ public class HoseokExam implements Exam {
 	private int math;
 	private int com;
 
+	public HoseokExam() {
+	}
+
+	public HoseokExam(int kor, int eng, int math, int com) {
+		this.kor = kor;
+		this.eng = eng;
+		this.math = math;
+		this.com = com;
+	}
+
 	@Override
 	public int total() {
 		return kor + eng + math + com;
@@ -47,6 +57,11 @@ public class HoseokExam implements Exam {
 
 	public void setCom(int com) {
 		this.com = com;
+	}
+
+	@Override
+	public String toString() {
+		return "HoseokExam [kor=" + kor + ", eng=" + eng + ", math=" + math + ", com=" + com + "]";
 	}
 
 }
