@@ -1,5 +1,7 @@
 package spring.di.ui;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import spring.di.entity.Exam;
 
 // GridExamConsole = Exam출력시 격자 형태로 출력
@@ -20,6 +22,7 @@ public class GridExamConsole implements ExamConsole {
 		System.out.println("avg :\t" + exam.avg());
 	}
 
+	@Autowired
 	@Override
 	public void setExam(Exam exam) {
 		this.exam = exam;

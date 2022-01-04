@@ -435,7 +435,7 @@ public class Program {
 	</bean>
 
 	> 생성자의 값을 설정하지만 내부에 설정되는 값이 컬렉션이므로 list태그를 이용해 초기화 하고자 하는 내용을 추가한다.
-	> 우린 객체를 직접만들어 초기화 한다 이곳에선 굳이 bean의 id값이 필요없다.
+	> 우린 객체를 직접만들어 초기화 한다. 이곳에선 bean의 id값이 필요없다.
 	> bean을 직접 만들지 않고 위에 존재하는 객체가 있으면 참조하여 사용할 수 있다. -> ref태그를 이용하여
 	> 그렇게 되면 총 2개의 항목이 추가된다 1. 직접 만든 객체, 2.먼저 생성된 객체 참조
 
@@ -470,13 +470,59 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ 어노테이션을 이용할 때의 장점과 @Authwired를 이용한 DI 해보기 ------------------------------------------------------------>
+* 자바 어플리케이션 만들때 초기화 설정을 위한 두가지 방법
+	1. XML을 이용해 외부파일로 설정 정보를 둠
+	2. Annotation을 이용해 코드파일에 설정을 심음
+	
+	> DI하는 부분을 Annotation으로 바꿔보자
+
+* Annotation을 사용하게 되는점의 장점
+
+	* 예를 들어 아래와 같은 XML 코드가 있다. 뺀 이유는 결합상태를 바꾸기 위한 코드가 수정될수있으므로 소스코드 변경없이 내용을 변경하기위해서임.
+		<bean id="b" class="data.B2" />
+		<bean id="console" class="service.S">
+			<property name="b" ref="b" />
+		</bean>
+
+		> 객체 B2를 신버전 B3로 변경하고 싶으면 class속성을 수정한다.
+		> 하지만 이걸 수정하는것도 귀찮아짐 --> Annotation을 사용함(코드에 메타 데이터를 심음)
+
+	* @Component 스프링이 코드를 읽게해 컴포넌트 어노테이션 발견시 객체화 하는 동작을한다
+
+	* 만약 B3로 대체하게되면 도킹을 하게되는 annotation이 존재 -> @Autowired
+
+	* 이렇게 되면 설정파일이 따로 존재하지 않음 --> 객체를 바꾸게되면 그 자체로 코드 및 설정도 같이 변경된다.
+
+* 설정을 분리하는 방식(xml)에서 annotation을 이용해서 설정을 코드와 같이 가져가는 방식으로 변경
+
+* 객체에 객체를 injection하는 부분을 annotation화 할것 --> <property name="exam" ref="exam"/> --> @Autowired
+	> 제일먼저 xml에서 annotation으로 바꿀 부분이다.
+
+* @Autowired의 역할
+	> console에서 setter가있고 setter가 사용하는 속성 또는 setter에 @Autowired를 붙이면 xml에서 지울수있다.
+	> 이렇게 되면 설정파일이 따로 존재하지 않음 --> 객체를 바꾸게되면 그 자체로 코드 및 설정도 같이 변경된다.
 
 
+* @Autowired 사용하기
+	1. annotation을 사용할 부분을 지워준다.
+	<bean id="exam" class="spring.di.entity.HoseokExam" p:kor="10" p:eng="20" p:math="30" p:com="40"/>
+	<bean id="console" class="spring.di.ui.GridExamConsole">
+		<!-- <property name="exam" ref="exam"/> -->	--> 이부분을 지움
+	</bean>
 
 
+	2. GridExamConsole.setExam 메소드에 @Autowired 어노테이션을 작성
+		> 하지만 객체를 만들어주는 부분에서 특별한 지시 없으면 클래스 내부에서 annotation이 있는지 찾지 않는다.
+
+	3. 지시서에 부탁할 수 있는 키워드를 추가해야한다. 
+		> context namespace를 추가하고 
+		> <context:annotation-config/> 을 xml 최상단에 작성하면 객체들이 annotation을 가지고 있다는 의미로 한줄만 작성하면 객체를 만들면서 내부 설정에서 annotation을 찾음
 
 
-
+* 기존 xml에선 <property name="exam" ref="exam"/> ref으로 어떤 객체를 세팅할지 명시해줬지만
+  @Autowired는 태그를 지우고 annotation만 남기므로 따로 묶어줄 수 있는 근거가 부족하다.
+	> 만약 xml내 동일한 형식의 객체가 2개가 있으면 어떤 객체를 바인딩 할것일까? --> 문제점 발생
 
 
 

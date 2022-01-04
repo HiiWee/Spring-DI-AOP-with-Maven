@@ -3,8 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<!-- 객체들이 annotation을 가지고 있다는 의미로 한줄만 작성하면 객체들을 생성할때
+		 내부 설정에서 annotation을 찾음 -->
+	<context:annotation-config/>
 	<!-- Exam, Console객체의 생성 및 결합을 xml설정파일이 담당함 -->
 	<!-- 생성하려는객체=class, 변수명=id 
 		 다만 생성하려는 객체는 동명이인이 존재할 수 있으므로 패키지명까지 같이 작성해야한다. 
@@ -43,10 +49,12 @@
 		이와같은 과정이 Injection이 되겠다.
 		다만 value, ref중 하나만 작성되어야 한다.
 	-->
-		<property name="exam" ref="exam"/>
+		<!-- Annotation을 이용하기 위해 지움 -->
+		<!-- <property name="exam" ref="exam"/> -->
 	</bean>
 
-
+<!-- 기존 list태그는 목록을 세팅할 떄 사용되는 태그로 그 자체가 객체를 만드는 역할을 하진 못함
+	util:list는 이름은 같지만 처리기가 다르고 실제로 객체를 만들 수 있도록 하는 능력을 가지고 있다. -->
 	<util:list id="exams" list-class="java.util.ArrayList">
 		<bean id="exam" class="spring.di.entity.HoseokExam" p:kor="1"
 			p:eng="1" p:math="1" p:com="1" />

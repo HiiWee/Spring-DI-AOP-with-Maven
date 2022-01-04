@@ -37,12 +37,12 @@ public class Program {
 		console.print();
 		
 		// XML을 이용해 값을 초기화 하는 방법
-		List<Exam> exams = (List<Exam>) context.getBean("exams");//new ArrayList<>();
+		//List<Exam> exams = (List<Exam>) context.getBean("exams");//new ArrayList<>();
 		//exams.add(new HoseokExam(1,1,1,1));
 		
-		for (Exam e : exams) {
-			System.out.println(e);
-		}
+		//for (Exam e : exams) {
+		//	System.out.println(e);
+		//}
 		// new ArrayList<>()
 	}
 }
