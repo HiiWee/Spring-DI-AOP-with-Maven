@@ -585,6 +585,63 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ @Autowired의 위치와 required 옵션  ------------------------------------------------------------>
+* @Autowired는 설정할 수 있는 위치가 총 3곳이다. 그리고 required라는 옵션을 가지고 있다.
+	1. setter
+	2. constructor(오버로드 생성자)
+	> 의존성을 주입할때(DI) setter를 사용하거나(property태그), 생성자(constructor-arg태그)를 사용하기 때문에 가능
+	3. field위에
+		> 2번은 오버로드 생성자에서 바인딩 3번은 overload생성자와 달리 기본생성자에서 객체를 바인딩하는 작업을 의미함
+
+* 만약 기본생성자를 지우고 field위에 annotation을 두고 실행하면 오류발생 왜? 오버로드생성자가 있으면 기본생성자를 자동으로 생성해주지 않으므로
+	> 따라서 기본생성자를 지우고싶다면 오버로드 생성자도 같이 지워주는게 바람직함
+
+* 오버로드 생성자에 @Autowired와 @Qualifier를 두면 @Qualifier에서 오류가 발생함
+	> 오버로드 생성자는 매개변수로 두 개 이상 올 수 있다고 생각되어 모호하다는 오류를 발생시킨다.
+	> 따라서 각자 지정할 수 있게끔 매개변수에 직접 @Qualifier를 설정해야한다.
+
+* 주 사용 위치는 기본생성자가 편리할수도?
+
+* 만약에 객체가 애초에 생성되지 않고(xml파일에서 생성X) HoseokExam.exam==null 값을 가진다. 기존의 어노테이션방법은 바로 오류를 발생하고 종료됨
+  하지만 아래와 같이 exam의 값이 null인경우 즉 생성된 객체가 없을 경우 기본값 0을 출력하고 싶다면 구현할 수 없게 된다.
+	@Override
+	public void print() {
+		if (exam == null) {
+			System.out.println("total :\t" + 0);
+			System.out.println("avg :\t" + 0);
+		}
+		else {
+			System.out.println("total :\t" + exam.total());
+			System.out.println("avg :\t" + exam.avg());
+		}
+	}
+  이럴때 @Autowired(required = false)로 required 옵션을 false로 두면 객체가 없어도 프로그램이 실행되고 print메소드에서 기본값을 출력한다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
