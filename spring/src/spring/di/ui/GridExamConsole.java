@@ -2,15 +2,18 @@ package spring.di.ui;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import spring.di.entity.Exam;
 
 // GridExamConsole = Exam출력시 격자 형태로 출력
+@Component("console")
 public class GridExamConsole implements ExamConsole {
 	
 	// 기본생성자를 호출하며 injection이 된다.
-	@Autowired(required = false)
-	@Qualifier("exam1")
+	// required = false는 일단 객체가 null이어도 진행시킴
+	//@Autowired(required = false)
+	//@Qualifier("exam1")
 	private Exam exam;
 
 	public GridExamConsole() {
@@ -35,7 +38,6 @@ public class GridExamConsole implements ExamConsole {
 			System.out.println("avg :\t" + exam.avg());
 		}
 	}
-
 
 	// setter를 호출하며 injection 가능
 	@Override

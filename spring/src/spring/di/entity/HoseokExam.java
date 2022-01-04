@@ -1,7 +1,13 @@
 package spring.di.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 // HoseokExam = Exam data 구현 객체
+@Component("exam1")
 public class HoseokExam implements Exam {
+	
 	private int kor;
 	private int eng;
 	private int math;
