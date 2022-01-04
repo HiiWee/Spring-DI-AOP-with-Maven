@@ -530,6 +530,66 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ @Autowired와 @Qualifier ------------------------------------------------------------>
+* @Autowired는 DI 하는 xml을 대신하는 annotation 설정임
+	> 자동으로 무엇인가 해줄때 잘못된 방향의 DI가 될 수 있는 문제점이 존재하므로 이것과 관련된 annotation인 @Qualifier를 알아보자
+
+* xml, annotation을 객체 생성 후 DI 할 떄 IoC Container를 가짐 --> 스프링이 가진 컨테이너는 객체를 생성하고 조립해주는 과정의 객체를 담음
+
+* xml을 이용한 객체 생성과정을 annotation으로 변경하면 IoC Container에 똑같이 담긴다.
+
+* Autowired 자동으로 찾아서 Exam을 세팅하는데 어떤걸 기준으로 찾을까? 자료형?, 변수명을 가지고 해당되는 이름?
+	> 변수 이름(id값)을 변경할 경우 : 정상적으로 동작(심지어 없애도 동작), 또한 xml은 HoseokExam의 객체고 setExam의 매개변수는 인터페이스 타입 Exam이다 따라서
+					  형식 명칭이 달라도 참조 가능한 객체를 자동으로 찾아준다
+	> 객체가 컨테이너에 2개가 존재할경우 : No qualifying bean of type 'spring.di.entity.Exam' available: expected single matching bean but found 2 : 
+					       사용할 객체는 1개인데 2개가 발견되어 모호하다는 오류가 발생
+					     : 형식이 같은 객체가 두개 있을경우 이름으로 구분지어주면 바인딩이 된다. (이때는 이름이 동일해야한다.)
+	> 이름이 다른 객체가 2개 존재할경우
+		[xml]
+		<bean id="exam1" class="spring.di.entity.HoseokExam" p:kor="10" p:eng="20" p:math="30" p:com="40"/>
+		<bean id="exam2" class="spring.di.entity.HoseokExam" p:kor="20" p:eng="20" p:math="30" p:com="40"/>
+		
+		[code]
+		@Autowired
+		@Override
+		public void setExam(Exam exam) {
+			this.exam = exam;
+		}
+
+		> 이때는 코드에서 매개변수명을 변경하면 문제가 있음(코드의 변경 최소화)
+		> 따라서 이때 @Qualifier("exam1") 이렇게 원하는 객체를 지정할 수 있다.
+
+* @Qulifier("exam1")의 사용
+		<bean id="exam1" class="spring.di.entity.HoseokExam" p:kor="10" p:eng="20" p:math="30" p:com="40"/>
+		<bean id="exam2" class="spring.di.entity.HoseokExam" p:kor="20" p:eng="20" p:math="30" p:com="40"/>
+
+
+		@Autowired
+		@Qualifier("exam1")
+		@Override
+		public void setExam(Exam exam) {
+			this.exam = exam;
+		}
+
+
+* 따라서 @Autowired가 어떤것을 기준으로 객체를 꺼내서 injection을 해주는지 잘 알고 있어야 함
+	> 자료형식을 기본으로 함
+	> 다만 식별이 모호할 경우 매개변수 이름도 같이 사용한다
+		> 다만 xml에 부여한 id를 가지고 코드의 매개변수명을 변경하는건 문제가 있으므로 @Qualifier를 이용함
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

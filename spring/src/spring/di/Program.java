@@ -31,8 +31,10 @@ public class Program {
 		// ExamConsole이라는 녀석의 class타입에 맞는 녀석을 달라는 말
 		// 즉 ExamConsole에 참조될 수 있는 객체를 찾아달라는 말
 		// (여기서는 인터페이스 형식이므로 인터페이스 형식에 참조될 수 있는것을 찾음)
-		Exam exam = context.getBean(Exam.class);
-		System.out.println(exam.toString());
+		
+		
+		// Exam exam = context.getBean(Exam.class);
+		//System.out.println(exam.toString());
 		ExamConsole console = context.getBean(ExamConsole.class);
 		console.print();
 		
