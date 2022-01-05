@@ -22,7 +22,7 @@ public class GridExamConsole implements ExamConsole {
 	
 	// 오버로드 생성자에서 Qualifier는 매개변수에 직접 설정해야함
 	@Autowired
-	public GridExamConsole(@Qualifier("exam1")Exam exam) {
+	public GridExamConsole(@Qualifier("exam")Exam exam) {
 		System.out.println("overloaded constructor");
 		this.exam = exam;
 	}

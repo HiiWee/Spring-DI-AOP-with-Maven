@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import spring.di.entity.Exam;
@@ -22,8 +23,13 @@ public class Program {
 		 console = new GridExamConsole(); 
 		 console.setExam(exam);
 		 */
-
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring/di/setting.xml");
+		
+		// xml configuration
+		// ApplicationContext context = new ClassPathXmlApplicationContext("spring/di/setting.xml");
+		
+		// annotation configuration
+		ApplicationContext context = new AnnotationConfigApplicationContext(HoseokDIConfig.class);
+		
 		// 이름을 가지고 IoC Container에서 꺼내쓰기(Casting 작업이 필요하다)
 		ExamConsole console = (ExamConsole) context.getBean("console");
 		
