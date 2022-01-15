@@ -822,15 +822,58 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ AOP 자바코드(구현방식) 이해하기   ------------------------------------------------------------>
+* AOP구현방식에 대해 이해하자
+
+public class HoseokExam implements Exam {
+	
+	@Override
+	public int total() {
+	}
+
+	@Override
+	public float avg() {
+	}
 
 
 
+* 위의 클래스에선 total() avg() 메소드를 구현하고 있었음 > 이는 사용자가 요구하는 요구사항 및 사용자에게 서비스 해야할 로직을 구현함
 
+* 때로는 새로운 관점이 생김
+	> 권한을 주기 위한 코드를 삽입하거나
+	> 실행시간을 알아보기 위한 시간타임을 출력하는 로그 추가
 
+* 업무로직과 별개에 관점에 따라서 코드를 넣고 싶음
+	> 과거에는 주 업무 로직과 상관없는 다른 관점의 코드를 주업무로직에 같이 작성함
+	public class HoseokExam implements Exam {
+		/* 이곳에 다른관점 작성 */
+		@Override
+		public int total() {
+		}
 
+		@Override
+		public float avg() {
+		}
 
+		/* 이곳에 다른관점 작성 */
+	}
 
+* 만약 주 업무 로직에 대한 코드를 가지고 있지 않으면 코드를 삽입하는 행위 자체가 불가능해짐 --> 문제 발생 --> 이것을 가능케하는 방법론?
+	> AOP
 
+* AOP를 구현하는 방법
+	> 주 업무 로직에서 다른 관점의 코드를 분리함
+	> 이런 코드를 Cross-cutting Concern이라 불리고 주 업무 로직은 Core Concern이라 불림
+	> 그리고 Cross-cutting Concern을 꽂아넣을 방법을 찾아야함
+	> Core Concern소스코드가 있든 없든 꽂아넣을 방법을 찾아야함
+	> 흐름상으로 봤을때 같이 있는것과 같이 실행절차를 만든다. --> proxy라는 개념
+
+* 프록시 클래스에 구현되는 Cross-cutting Concern
+	> 사용자가 프록시를 호출하면 프록시에서 주업무를 호출하는 곳에서 전, 후로 Cross-cutting Concern에 해당되는 코드를 작성할 수 있다.
+	> 따라서 실행순서가 Cross-cutting Concern -> Core Concern -> Cross-cutting Concern 순서로 실행 된다. (마치 주 업무로직에 코드를 꽂은것과 동일한 실행순서를 가진다.)
+	> 이렇게 하면 소스코드 없이 남이 만든 코드 또는 전에 만든 코드에 앞 뒤에 Cross-cutting Concern을 실행시킬 수 있다.
+	> 프록시의 방법은 Spring과 아무상관 없음, 순수한 Java 코드로 구현하는 방식이다.
+	> 프록시의 결합과 분리를 Spring의 DI를 이용하면 쉽게 이용가능함
 
 
 
