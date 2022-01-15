@@ -880,6 +880,174 @@ public class HoseokExam implements Exam {
 
 
 
+< ------------------------------------------------------------ 순수 자바로 AOP 구현해보기   ------------------------------------------------------------>
+* AOP 구현 전에 업무로직을 가지고 있는 하나의 클래스가 있어야 함 --> 그곳에 곁다리 업무(Cross-cutting Concern)을 꽂아 넣음
+
+* 기존의 total(), avg() 메소드를 result에 계산 값을 담아 result를 리턴해 곁다리 업무를 추가할 수 있는 구조로 변경
+
+	@Override
+	public int total() {
+		
+		int result = kor + eng + math + com;
+		
+		return result;
+	}
+* 기존의 total() 메소드가 성능이 안좋다는 피드백 받음 --> total() 메소드에 시작과 끝 부분에 시간을 체크하기 위한 코드 추가 --> 프로그래머, 운영자 관점(Cross-cuttgin Concern)
+	> 따라서 기존의 업무 로직 코드에 시간 출력 코드(Cross-cutting Concern) 작성
+	@Override
+	public int total() {
+		// Cross-cutting Concern
+		long start = System.currentTimeMillis();
+		/*---------------------------------*/
+		
+		// Core Concern
+		int result = kor + eng + math + com;
+		
+		
+		
+		/*---------------------------------*/
+		// Cross-cutting Concern
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		long end = System.currentTimeMillis();
+		
+		String message = (end - start) + "ms 시간이 걸렸습니다.";
+		System.out.println(message);
+		
+		return result;
+	}
+
+* AOP 방식으로 변경 (소스코드에 직접작성하지 않고 분리하고 연결하겠다)
+	> Cross-cutting Concern을 따로 만들고 그것을 연결해 줄 수 있는 proxy 도구를 이용한다.
+	> Java는 Proxy 도구를 지원해줌
+	> Proxy.newProxyInstance(loader, interfaces, h); 는 인스턴스를 만들어줌 --> Interface타입 따라서 Exam 객체를 생성가능 --> 가짜 Exam(Proxy는 가짜라는 뜻도 가짐)
+	> proxy가 가진 기능이 기존 exam과 똑같은 기능을 가지지만 곁다리업무(Cross-cutting Concern)를 가지는것의 차이가 있다.
+
+	> loader : 프록시는 가짜지만 실제 업무를 호출해야 하므로 업무를 실행할 객체의 정보를 넣어줘야함 HoseokExam.class.getClassLoader()
+	> interfaces : 인터페이스 정보를 넘겨준다, 복수형 이므로 배열을 전달 new Class[] {Exam.class} : 여러개의 인터페이스를 구현하고 있으면 여러 인터페이스를 전달한다.
+	> h : 곁다리 업무를 꽂을 수 있는 부분이다. : InvocationHandler라는 인터페이스를 구현한 클래스를 객체화 해야함, 별도의 클래스파일 생성없이 익명으로 익명 클래스를 작성
+		> 위 아래는 곁다리 업무, 가운데는 실제 업무 코드를 작성함
+
+* new InvocationHandler() 구현
+	public Object invoke(Object proxy, Method method, Object[] args) 메소드 존재
+
+	> Cross-cutting Concern 사이에 실제 업무 로직을 작성해야함 이를 위해 실제 업무를 담당하는 메소드를 호출하는 기능인 method를 이용한다.
+	> method.invoke(obj, args) : obj는 실제 업무 객체 exam을 넣어주고 Object[] args는 우리가 total()혹은 avg() 메소드를 호출할 수 있게 되는데 호출하는 메소드가 가진 파라미터를 넘겨주며
+	  인자를 빠트리지 않도록 한다. 또한 invoke호출 시 업무로직에서 반환하는 값을 다시 반환하기 위해 Object result에 담는다.
+
+* proxy.total()을 실행하면 화면에 경과된 시간이 찍힌다 --> Cross-cutting Concern -> Core Concern -> Cross-cutting Concern 순으로 실행
+  exam.tatal()을 실행하면 업무 로직만 실행된다.
+	> 따라서 원할때 곁다리 업무를 넣고 뺄 수 있게된다.
+	> 또한 인터페이스를 공유하는 다른함수를 사용해도 로그(곁다리 업무)를 끼울 수 있다.	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
