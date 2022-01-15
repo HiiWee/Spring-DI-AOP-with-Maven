@@ -225,7 +225,8 @@ public class Program {
 * XML파일에서 객체의 생성 및 결합을 표기하는 방법
 	> 생성 : <bean>태그를 이용해 생성할 객체를 지정한다.
 		ex) <bean id="exam" class="spring.di.entity.HoseokExam"></bean>  생성하려는객체=class, 
-		변수명=id 다만 생성하려는 객체는 동명이인이 존재할 수 있으므로 패키지명까지 같이 작성해야한다. 
+		변수명=id, class=생성할 객체명 다만 생성하려는 객체는 같은이름의 클래스를 가진 다른 객체가 있을 수 있으니 즉 동명이인이 존재할 수 있으므로
+		다른 녀석이 생성되는 일이 발생하지 않도록 패키지명까지 같이 작성해야한다. 
 		만약 같은 형식의 클래스가 존재하지 않으면 굳이 이름을 적지 않아도 된다. 
 
 	> 결합 : console.setExam(exam);은 어떻게 결합해야 할까? (console이 exam을 갖음)
@@ -949,34 +950,127 @@ public class HoseokExam implements Exam {
 
 
 
+< ------------------------------------------------------------ 스프링으로 AOP 구현해보기-AroundAdvice   ------------------------------------------------------------>
+* 업무 로직과 의미가 다른 코드를 뺐다 꽂았다 하기 위해 분리하기 위한 방법 이용 : AOP
+	> 관점이 다른 코드를 업무로직과 연관해 코드를 쉽게 붙이고 쉽게 작성하고 쉽게 유지보수할 수 있는지에 대한 방법론
+	> 기존에 proxy를 이용해 곁다리 업무를 꽂고 실제 업무로직에는 아무런 코드를 작서하지 않음
 
+* 위와 같은 구성을 Spring으로 이용하면 좀 더 편해질까?
+	> AOP를 구현할 때 Spring을 이용하던 하지 않던 Proxy가 있어야 하고 Proxy 꽂을 Cross-cutting Concern과 업무로직이 있어야한다.
+	> 위 3개가 도킹이 됐다 안됐다 자유로워야함 -> Spring이 좀 더 쉽게 할 수 있게 도와준다.
 
+* Spring은 직접 제공하고 있는 Proxy 클래스를 이용해 IoC Contatiner에 담고 수행하게될 2개의 업무(주업무, 곁다리업무)를 따로 만들어서 꽂아 넣을 수 있게함 (IoC Container의 큰 장점)
+	> 3가지의 객체를 꽂았다 뺐다 할 수 있음
 
+* 만약 작성하는 곁다리 업무 코드가 앞에만 작성하는 경우도 있음 혹은 뒤에만 넣어야 하는 경우도 있다.
+	> 주 업무 실행 전 무엇인가를 검사해야하는 경우 등등
 
+* 따라서 Spring에서는 위와 같은 형태를 총 4가지로 구분하고 있다.
+	> Before : 앞에만 필요한 Cross-cutting Concern(곁다리 업무)
+	> After returnning : 뒤에만 필요한 Cross-cutting Concern(곁다리 업무)
+	> After throwing : 예외를 처리하는 Cross-cutting Concern(곁다리 업무)
+	> Around : 앞 뒤 모두 필요한 Cross-cutting Concern(곁다리 업무)
 
+	> 4가지로 구분하고 이들을 각각 Before Advice, After returninng Advice, After throwing Advice, Around Advice라 말함
 
+* 4가지 중 내가 구현하고자 하는 형태에서 가장 알맞은 것을 인터페이스를 상속받아 구현하여 꽂아 넣는다.
+	> 실행시간 로그를 찍을때 사용된 건 Around Advice와 가장 근접함
 
+* xml파일로 AOP 설정하기
+	> xml 파일에 3가지를 설정해야함
+	> HoseokExam() 생성, Proxy.newProxyInstance() 생성, 곁다리 업무를 작성해서 꽂아넣을 코드
 
+* HoseokExam(), 곁다리 클래스 생성
+	<!-- Exam exam = new HoseokExam(1, 1, 1, 1); -->
+	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
+	<!-- 로그를 출력하기 위한 클래스 -->
+	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
 
+* Proxy 생성
+	> proxy 생성은 실제 HoseokExam 객체(target)에 해당되는 ClassLoader를 넣고, 곁다리 업무에 해당되는 로직을 설정해야하 한다. (인터페이스형식은 Spring이 알아서 해줌)
+	> 따라서 target과 Handler(Cross-cutting Concern)만 넣어주면 동작이 된다.
+	> target은 name="target", Handler는 name="intercpetorNames" 옵션을 이용 Handler는 복수형이므로 list 태그를 이용해 여러개를 넣어줄 수 있다.
+	> list 태그는 참조열이므로 내부에 쓰이는 value태그는 값이 아닌 참조하고 있는 녀석의 이름을 넣어준다.
+	<!-- proxy 객체 만들기 -->
+	<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- HoseokExam 객체 설정하기 -->
+		<property name="target" ref="target"/>
+		<!-- 복수형, 여러개 넣기 가능 -->
+		<property name="interceptorNames">
+			<list>
+				<!-- value라고 말했지만 list태그는 참조열 이므로 value는 참조하고 있는 녀석의 이름을 넣어준다. -->
+				<value>logAroundAdvice</value>
+			</list>
+		</property>
+	</bean>
 
+	> 또한 로그출력 곁다리 코드를 만들기 위해 클래스를 만들어야한다. 이는 MethodInterceptor라는 인터페이스를 상속받는다.
+	> 여기서 오버라이드 되는 public Object invoke(MethodInvocation invocation) 메소드는 이전에 순수 자바로 구현한 AOP의 invoke함수와 동일한 역할을 한다.
+	> 여기서 invocation.proceed();는 자바 AOP에서 method.invoke()와 동일한 역할을 한다.
+	> 이것 외에는 앞뒤에 들어갈 내용이 동일하다.
+	> 또한 proceed() 메소드는 target을 쓰기 위해 exam, args의 인자들을 넘겨받지 않아 다른 외부적인 요소와 연관되지 않게끔 해결함.
+	public class LogAroundAdvice implements MethodInterceptor{
 
+		@Override
+		public Object invoke(MethodInvocation invocation) throws Throwable {
+			// Cross-cutting Concern
+			long start = System.currentTimeMillis();
 
+			// Core Concern 실제 업무 로직 호출
+			Object result = invocation.proceed();
+		
+			// Cross-cutting Concern
+			long end = System.currentTimeMillis();
 
+			String message = (end - start) + "ms 시간이 걸렸습니다.";
+			System.out.println(message);
 
+			return result;
+		}
+	}
 
+* xml 최종
+	<!-- Exam exam = new HoseokExam(1, 1, 1, 1); -->
+	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
+	<!-- 로그를 출력하기 위한 클래스 -->
+	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
+	
+	<!-- proxy 객체 만들기 -->
+	<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- HoseokExam 객체 설정하기 -->
+		<property name="target" ref="target"/>
+		<!-- 복수형, 여러개 넣기 가능 -->
+		<property name="interceptorNames">
+			<list>
+				<!-- value라고 말했지만 list태그는 참조열 이므로 value는 참조하고 있는 녀석의 이름을 넣어준다. -->
+				<value>logAroundAdvice</value>
+			</list>
+		</property>
+	</bean>
 
+* 따라서 main의 기존 자바로 구현한 proxy생성 및 Cross-cutting Concern부분은 주석처리한다.
+* 최종 Program.java 코드
+public class Program {
 
+	public static void main(String[] args) {
 
+		// xml configuration
+		ApplicationContext context = new
+				ClassPathXmlApplicationContext("spring/aop/setting.xml");
 
+		// xml에서 id="proxy"해당되는 객체를 가져옴
+		Exam exam = (Exam) context.getBean("exam");
+		// annotation configuration
+		//ApplicationContext context = 
+		//		new AnnotationConfigApplicationContext(HoseokDIConfig.class);
 
+		System.out.printf("total is %d\n", exam.total());
+		System.out.printf("total is %f\n", exam.avg());
 
-
-
-
-
-
-
-
+	}
+}
+* 여기서 xml에서 proxy객체 생성 및 DI부분을 지우고 기존의 HoseokExam의 id 값을 exam으로 변경하여 실행하면 실제 소스코드의 변경없이 설정의 변경만으로도
+  Cross-cutting Concern을 끼고 뺄 수 있다.
 
 
 

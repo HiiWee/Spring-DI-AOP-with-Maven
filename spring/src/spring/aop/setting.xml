@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<!-- Exam exam = new HoseokExam(1, 1, 1, 1); -->
+	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
+	<!-- 로그를 출력하기 위한 클래스 -->
+	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
+	
+	<!-- proxy 객체 만들기 -->
+	<bean id="exam" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- HoseokExam 객체 설정하기 -->
+		<property name="target" ref="target"/>
+		<!-- 복수형, 여러개 넣기 가능 -->
+		<property name="interceptorNames">
+			<list>
+				<!-- value라고 말했지만 list태그는 참조열 이므로 value는 참조하고 있는 녀석의 이름을 넣어준다. -->
+				<value>logAroundAdvice</value>
+			</list>
+		</property>
+	</bean>
+</beans>
