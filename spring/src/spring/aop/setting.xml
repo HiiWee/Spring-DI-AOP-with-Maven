@@ -10,8 +10,10 @@
 	
 	<!-- Exam exam = new HoseokExam(1, 1, 1, 1); -->
 	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
-	<!-- 로그를 출력하기 위한 클래스 -->
+	<!-- 로그를 출력하기 위한 클래스 AroundAdvice(앞 뒤 모두 실행) -->
 	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
+	<!-- 로그를 출력하기 위한 클래스 BeforeAdvice(앞에서만 실행) -->
+	<bean id="logBeforeAdvice" class="spring.aop.advice.LogBeforeAdvice"/>
 	
 	<!-- proxy 객체 만들기 -->
 	<bean id="exam" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -22,6 +24,7 @@
 			<list>
 				<!-- value라고 말했지만 list태그는 참조열 이므로 value는 참조하고 있는 녀석의 이름을 넣어준다. -->
 				<value>logAroundAdvice</value>
+				<value>logBeforeAdvice</value>
 			</list>
 		</property>
 	</bean>

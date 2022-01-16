@@ -3,6 +3,7 @@ package spring.aop.advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+// 로그를 출력하기 위한 Around 형태의 advice
 public class LogAroundAdvice implements MethodInterceptor{
 
 	@Override
