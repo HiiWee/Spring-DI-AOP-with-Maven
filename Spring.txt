@@ -969,7 +969,7 @@ public class HoseokExam implements Exam {
 
 * 따라서 Spring에서는 위와 같은 형태를 총 4가지로 구분하고 있다.
 	> Before : 앞에만 필요한 Cross-cutting Concern(곁다리 업무)
-	> After returnning : 뒤에만 필요한 Cross-cutting Concern(곁다리 업무)
+	> After returning : 뒤에만 필요한 Cross-cutting Concern(곁다리 업무)
 	> After throwing : 예외를 처리하는 Cross-cutting Concern(곁다리 업무)
 	> Around : 앞 뒤 모두 필요한 Cross-cutting Concern(곁다리 업무)
 
