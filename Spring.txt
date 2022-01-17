@@ -1094,18 +1094,26 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ After Returning/Throwing Advice 구현   ------------------------------------------------------------>
+* After Returning : 업무 로직 메소드가 끝나고 뒤에만 필요한 Cross-cutting Concern(곁다리 업무)를 처리
+* After Throwing : 업무 로직 메소드 실행 중 예외가 발생하면 필요한 Cross-cutting Concern(곁다리 업무)를 처리한다.
+
+* After Returning은 AfterReturningAdvice 인터페이스를 상속받고 오버라이드할 메소드는 아래와 같다.
+	public void afterReturning(Object returnValue, Method method, Object[] args, Object target)
+
+	> returnValue : 주 업무 메소드 호출이후 반환된 결과 값, 
+	> method : 대상 메소드
+	> args : 메소드의 인수
+	> target : 대상이 되는 객체(인스턴스)
 
 
+* After Throwing은 ThrowsAdvice 인터페이스를 상속받는다. 특이하게도 ThrowsAdvice가 구현해야 할 함수가 정해질 수 없다.
+  기존에 다른 3개의 Advice방법은 메소드 및 인자가 고정되어있다. 하지만 어떤 예외가 발생하느냐에 따라서 함수가 달라지기 때문에
+  어떤것을 구현하라는 것을 고정시킬 수 없음 따라서 Interface Default Method가 이미 구현이 되어있다.
 
-
-
-
-
-
-
-
-
-
+	> 임의로 public void afterThrowing(IllegalArgumentException e) 메소드를 만들어 사용한다.
+		> 여기서 IllegalArgumentException말고도 수많은 예외가 발생할 수 있으므로 형식이 정해지지 않았다.
+		> 우리가 필요로 하는 예외를 설정하고 이용할 수 있다.
 
 
 

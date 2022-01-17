@@ -9,11 +9,18 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 	
 	<!-- Exam exam = new HoseokExam(1, 1, 1, 1); -->
-	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
+	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="101" p:eng="1" p:math="1" p:com="1"/>
 	<!-- 로그를 출력하기 위한 클래스 AroundAdvice(앞 뒤 모두 실행) -->
 	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
-	<!-- 로그를 출력하기 위한 클래스 BeforeAdvice(앞에서만 실행) -->
+	<!-- BeforeAdvice(앞에서만 실행) 구현 (주 업무 메소드 실행 전 실행) -->
 	<bean id="logBeforeAdvice" class="spring.aop.advice.LogBeforeAdvice"/>
+	<!-- After Returning 구현 (주 업무 메소드 실행 후 실행) -->
+	<bean id="logAfterReturningAdvice" class="spring.aop.advice.LogAfterReturningAdvice"/>
+	<!-- After Throwing 구현 (주 업무 메소드의 예외 처리) -->
+	<bean id="logAfterThrowingAdvice" class="spring.aop.advice.LogAfterThrowingAdvice"/>
+	
+	
+	
 	
 	<!-- proxy 객체 만들기 -->
 	<bean id="exam" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -25,6 +32,8 @@
 				<!-- value라고 말했지만 list태그는 참조열 이므로 value는 참조하고 있는 녀석의 이름을 넣어준다. -->
 				<value>logAroundAdvice</value>
 				<value>logBeforeAdvice</value>
+				<value>logAfterReturningAdvice</value>
+				<value>logAfterThrowingAdvice</value>
 			</list>
 		</property>
 	</bean>
