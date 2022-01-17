@@ -20,20 +20,48 @@
 	<bean id="logAfterThrowingAdvice" class="spring.aop.advice.LogAfterThrowingAdvice"/>
 	
 	<!-- Pointcut 설정 -->
-	<bean id="classicPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+	<!-- <bean id="classicPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+		<property name="mappedName" value="total" />
+	</bean> -->
+	
+	<!-- Pointcut과 logBeforeAdvice를 연결하기 위한 또다른 도구인 Advisor 생성 -->
+	<!-- <bean id="classicBeforeAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" />
+		<property name="pointcut" ref="classicPointCut" />
+	</bean> -->
+	
+	<!-- Pointcut과 logAroundAdvice를 연결하기 위한 또다른 도구인 Advisor 생성 -->
+	<!-- <bean id="classicAroundAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logAroundAdvice" />
+		<property name="pointcut" ref="classicPointCut" />
+	</bean> -->
+	
+	
+	<!-- Pointcut과 Advisor를 동시에 설정할 수 있는 Advisor 설정 -->
+<!-- 	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" />
+		<property name="mappedNames">
+			<list>
+				<value>total</value>
+				<value>avg</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	<!-- Pointcut과 Advisor를 동시에 설정할 수 있는 Advisor 설정 -->
+	<bean id="classicAroundAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logAroundAdvice" />
 		<property name="mappedName" value="total" />
 	</bean>
 	
-	<!-- Pointcut과 logBeforeAdvice를 연결하기 위한 또다른 도구인 Advisor 생성 -->
-	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+	<!-- 정규식을 이용한 Pointcut과 Advisor를 동시에 설정할 수 있는 Advisor 설정 -->
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
 		<property name="advice" ref="logBeforeAdvice" />
-		<property name="pointcut" ref="classicPointCut" />
-	</bean>
-	
-	<!-- Pointcut과 logAroundAdvice를 연결하기 위한 또다른 도구인 Advisor 생성 -->
-	<bean id="classicAroundAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
-		<property name="advice" ref="logAroundAdvice" />
-		<property name="pointcut" ref="classicPointCut" />
+		<property name="patterns">
+			<list>
+				<value>.*to.*</value>
+			</list>
+		</property>
 	</bean>
 	
 	<!-- proxy 객체 만들기 -->

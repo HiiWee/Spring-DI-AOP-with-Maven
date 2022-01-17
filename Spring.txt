@@ -1159,16 +1159,54 @@ public class Program {
 
 
 
+< ------------------------------------------------------------ 간소화된 Advisor ------------------------------------------------------------>
+* 포인트컷을 사용할 때 Advisor를 들이고 각 Advice에 설정하는 과정에서 불편함이 존재함(개별적으로 각각 설정해줘야함)
+* 때로는 Advisor와 Pointcut을 합치는 작업이 필요함 > Advisor중에서 Pointcut의 기능을 내제하고 있는 Advisor 클래스가 존재함
+	> org.springframework.aop.support.NameMatchMethodPointcutAdvisor
+	> 내부 property 태그로 setMappedName으로 포인트컷을 지정할 메소드를 결정
+
+	<!-- Pointcut과 Advisor를 동시에 설정할 수 있는 Advisor 설정 -->
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" />
+		<property name="mappedName" value="total" />
+	</bean>
+	
+	<bean id="classicAroundAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logAroundAdvice" />
+		<property name="mappedName" value="total" />
+	</bean>
 
 
 
+	> mappedNames 를 이용하면 list태그와 함꼐 여러 포인트컷 메소드를 설정할 수 있다.
+
+	<!-- Pointcut과 Advisor를 동시에 설정할 수 있는 Advisor 설정 -->
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" />
+		<property name="mappedNames">
+			<list>
+				<value>total</value>
+				<value>avg</value>
+			</list>
+		</property>
+	</bean>
+	> 위와 같이 설정하면 BeforeAdvisor는 total, avg메소드에서 모두 동작하게 된다.
 
 
+	> 또한 함수를 나열할때 일일이 하나씩 하는 방법말고도 패턴을 이용해(정규식) 이름을 설정할 수 있다.
+		org.springframework.aop.support.RegexpPointcutAdvisor 클래스 이용, setPatterns 이용
 
+	<!-- 정규식을 이용한 Pointcut과 Advisor를 동시에 설정할 수 있는 Advisor 설정 -->
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" />
+		<property name="patterns">
+			<list>
+				<value>.*to.*</value>
+			</list>
+		</property>
+	</bean>
 
-
-
-
+	> AOP를 구현할 수 있는 프레임워크로 Spring보다 이전부터 그리고 또 많은 기능을 제공해주는 AspectJ가 가지고있는 패턴문자를 사용할 수 도있다.
 
 
 

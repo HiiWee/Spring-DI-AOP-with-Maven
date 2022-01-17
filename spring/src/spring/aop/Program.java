@@ -46,7 +46,7 @@ public class Program {
 //				});
 
 		System.out.printf("total is %d\n", exam.total());
-		System.out.printf("total is %f\n", exam.avg());
+		System.out.printf("avg is %f\n", exam.avg());
 
 	}
 }
