@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 	
 	<!-- Exam exam = new HoseokExam(1, 1, 1, 1); -->
-	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="101" p:eng="1" p:math="1" p:com="1"/>
+	<bean id="target" class="spring.aop.entity.HoseokExam" p:kor="1" p:eng="1" p:math="1" p:com="1"/>
 	<!-- 로그를 출력하기 위한 클래스 AroundAdvice(앞 뒤 모두 실행) -->
 	<bean id="logAroundAdvice" class="spring.aop.advice.LogAroundAdvice"/>
 	<!-- BeforeAdvice(앞에서만 실행) 구현 (주 업무 메소드 실행 전 실행) -->
@@ -19,8 +19,22 @@
 	<!-- After Throwing 구현 (주 업무 메소드의 예외 처리) -->
 	<bean id="logAfterThrowingAdvice" class="spring.aop.advice.LogAfterThrowingAdvice"/>
 	
+	<!-- Pointcut 설정 -->
+	<bean id="classicPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+		<property name="mappedName" value="total" />
+	</bean>
 	
+	<!-- Pointcut과 logBeforeAdvice를 연결하기 위한 또다른 도구인 Advisor 생성 -->
+	<bean id="classicBeforeAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logBeforeAdvice" />
+		<property name="pointcut" ref="classicPointCut" />
+	</bean>
 	
+	<!-- Pointcut과 logAroundAdvice를 연결하기 위한 또다른 도구인 Advisor 생성 -->
+	<bean id="classicAroundAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logAroundAdvice" />
+		<property name="pointcut" ref="classicPointCut" />
+	</bean>
 	
 	<!-- proxy 객체 만들기 -->
 	<bean id="exam" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -30,8 +44,8 @@
 		<property name="interceptorNames">
 			<list>
 				<!-- value라고 말했지만 list태그는 참조열 이므로 value는 참조하고 있는 녀석의 이름을 넣어준다. -->
-				<value>logAroundAdvice</value>
-				<value>logBeforeAdvice</value>
+				<value>classicAroundAdvisor</value>
+				<value>classicBeforeAdvisor</value>
 				<value>logAfterReturningAdvice</value>
 				<value>logAfterThrowingAdvice</value>
 			</list>
