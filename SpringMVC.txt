@@ -1,0 +1,75 @@
+< ------------------------------------------------------------ Spring MVC ------------------------------------------------------------ >
+
+* Spring을 사용하지 않고 Tomcat(Tomcat Configuration)을 이용해 웹개발 가능(Servlet, JSP)
+	> 이때는 web.xml을 사용 : 사용할 라이브러리 인스턴스화(Mybatis, Tiles) 등등의 설정
+	> Spring을 사용하겠다 하면 이곳에 Spring을 얹음(Spring Dispatcher) : Spring Web 개발시 Spring Dispatcher 라이브러리를 기반으로 사용
+
+* Spring Dispatcher
+	> Controller의 공통분모를 모아놓은 Front Controller를 Spring에서 제공해줌 : 그게 Spring MVC다.
+	> Spring MVC를 쓰겠다면 Spring이 거의 모든것을 커버함 -> Spring을 쓰기위한 또다른 설정이 필요함 : Spring Configuration
+
+* Spring Web : Spring Configuration이 늘어남
+	> 톰캣의 web.xml 설정에서 옮겨짐 : Spring Config가 라이브러리 기타 등등을 관리하게 됨 (Mybatis, Tiles등)
+	> 또한 Spring Configuration에는 일반적으로 자신만의 설정인 Servlet, Service, Security설정들이 더 추가 됨
+
+* 결국 톰캣, 톰캣설정, 스프링, 스프링 설정 하는 방법들을 알아야함
+	> Spring 버전이 변화하며 설정방법도 변화하기 시작함
+		> XML, Annotation, Java등 다양한 방법 존재
+
+* 최근에는 이러한 설정에 대한것들을 도와줄 수 있는 Spring Boot가 나옴
+	> Spring MVC를 대신하기보단 설정에 대한것들을 모아서 편하게 해줄 수 있는 부가적인 프레임워크
+
+* Spring에 Spring Boot를 얹어서 사용하게 되면 기존의 복잡한 설정을 피할수 있게 된다.
+	> Stater Configuration을 필요로하는 각각의 설정들을 한번에 묶어서 라이브러리로 가지고 있다 -> 설정에 대한 라이브러리를 일일이 설정할 필요가 없다.
+	> 최대한 설정을 줄이고 설정파일 하나만 둠 applicaiton.properties(단순 텍스트파일) 혹은 YAML(Json같은 형태의 표기법파일)의 설정파일 중 골라서 사용함 (주로 application.properties사용)
+
+* Spring Boot를 사용하게 되면 결국 설정에 대한 부분이 크게 줄어든다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
