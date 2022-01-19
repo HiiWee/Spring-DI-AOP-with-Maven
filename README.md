@@ -1,2 +1,2 @@
 # Spring-study
-Study Maven Project and Spring(DI, AOP)
+Study Spring(DI, AOP) with Maven.
