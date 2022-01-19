@@ -1,2 +1,2 @@
 # Spring-study
-유튜브 뉴렉처, 인프런 김영한님의 강의를 듣고 정리하고 공부하는 저장소입니다
+Study Maven Project and Spring(DI, AOP)
